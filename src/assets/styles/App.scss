@@ -1,0 +1,111 @@
+@import "./base.scss";
+@import "./constants.scss";
+
+#modal-window {
+  position: absolute;
+  width: 99%;
+  top: 0;
+  z-index: 99999;
+  font-family: sans-serif;
+
+  .modal-window {
+    top: 0;
+    left: calc(100% - 412px);
+    margin-top: 2em;
+    position: fixed;
+    background: $primary-200;
+    opacity: 0.9;
+    width: 358px;
+    border-radius: 3px;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+    z-index: 9999;
+    border: 1px solid #333748;
+    padding: 20px;
+    border: solid 3px $primary-300;
+    border-radius: 20px;
+  }
+
+  .modal-close-button {
+    cursor: pointer;
+  }
+
+  .modal-content {
+    display: grid;
+    &__comments {
+      max-height: 500px;
+      overflow-y: scroll;
+      margin-bottom: 20px;
+    }
+    &__comment-button{
+      place-self: center;
+    }
+    &__confirm{
+      display: flex;
+      flex-direction: column;
+      place-content: center;
+    }
+  }
+
+  .text-comment {
+    margin: 20px 0px;
+    .header {
+      display: flex;
+      flex-direction: row;
+      width: 100%;
+      justify-content: space-between;
+      &__author {
+        color: $primary-100;
+      }
+      &__date {
+        color: $primary-100;
+      }
+    }
+  }
+
+  .primary-button {
+    background-color: $primary-300;
+    color: $primary-200;
+    padding: 8px 12px;
+    border-radius: 10px;
+    border: none;
+    &:hover {
+      padding: 5px 9px;
+      border: 3px solid $primary-400;
+      cursor: pointer;
+    }
+    &:disabled {
+      cursor: not-allowed;
+      background-color: $light-300;
+    }
+    &:focus {
+      background-color: $primary-400;
+      border: none;
+      outline: none;
+    }
+  }
+  .terciary-button {
+    background: none;
+    color: $primary-300;
+    padding: 8px 8px;
+    border: none;
+    &:hover {
+      text-decoration: underline;
+      cursor: pointer;
+    }
+    &:disabled {
+      cursor: not-allowed;
+      background-color: $light-300;
+    }
+    &:focus {
+      background-color: $primary-400;
+      border: none;
+      outline: none;
+    }
+  }
+  .comment-body {
+    &__text {
+      margin-top: 0px;
+    }
+  }
+}
+

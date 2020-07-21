@@ -1,0 +1,52 @@
+@import "./constants.scss";
+#modal-window {
+    body {
+        font-size: 16px;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5 {
+        font-family: "Roboto", sans-serif;
+        color: $primary-300;
+    }
+
+    p {
+        font-family: "Roboto Mono", monospace;
+        color: $light-100;
+    }
+
+    h1 {
+        font-size: 4.2em;
+    }
+
+    h2 {
+        font-size: 3.15em;
+    }
+
+    h3 {
+        font-size: 2.369em;
+    }
+
+    h4 {
+        font-size: 1.777em;
+    }
+
+    h5 {
+        font-size: 1.333em;
+    }
+
+    p {
+        font-size: 1em;
+    }
+
+    p.helper-text {
+        font-size: 0.75em;
+    }
+
+    p.copyright-text {
+        font-size: 0.75em;
+    }
+}
