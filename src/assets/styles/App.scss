@@ -16,13 +16,12 @@
     background: $primary-200;
     opacity: 0.9;
     width: 358px;
-    border-radius: 3px;
     box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
     z-index: 9999;
     border: 1px solid #333748;
     padding: 20px;
     border: solid 3px $primary-300;
-    border-radius: 20px;
+    border-radius: $border-radius-large;
   }
 
   .modal-close-button {
@@ -43,6 +42,9 @@
       display: flex;
       flex-direction: column;
       place-content: center;
+    }
+    &__comment-editor {
+      margin-bottom: 20px;
     }
   }
 
@@ -66,7 +68,7 @@
     background-color: $primary-300;
     color: $primary-200;
     padding: 8px 12px;
-    border-radius: 10px;
+    border-radius: $border-radius-standard;
     border: none;
     &:hover {
       padding: 5px 9px;
@@ -105,6 +107,20 @@
   .comment-body {
     &__text {
       margin-top: 0px;
+    }
+  }
+  .comment-editor{
+    height: 500px;
+    &__input {
+      width: 100%;
+      min-height: 150px;
+      padding: 10px;
+      background-color: $primary-250;
+      border-radius: $border-radius-standard;
+
+      &:focus {
+        outline: none;
+      }
     }
   }
 }

@@ -4,24 +4,9 @@ import { connectMetamask, signV4 } from '../services/ethereum'
 import Logo from '../images/logo'
 import { ModalContext } from '../Contexts/ModalProvider';
 
-const Modal = () => {
+const Reader = ({setPage}) => {
   const [web3Enabled, setWeb3Enabled] = useState(false)
   const [title, setTitle] = useState("nothing...")
-
-  // useEffect(() => {
-  //   window.addEventListener("message", (event) => {
-  //     setTitle(event.data)
-  //   }, false);
-  // }, [])
-
-
-  // useEffect(() => {
-  //   window.chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  //     console.log("GOT Message from the content script: " +
-  //       request.greeting);
-  //     // sendResponse({response: "Response from background script"});
-  //   });
-  // })
 
   return (
     <ModalContext.Consumer>
@@ -29,10 +14,9 @@ const Modal = () => {
         <div id="modal" className="modal-window">
           <div className="modal-body">
             <div className="modal-content">
-              {/* <img src={logo} className="modal-content__logo"/> */}
               <div className="modal-content__logo">
                 <Logo />
-                <h3>{`What people are saying...`}</h3>
+                <h3>{`Reading comments`}</h3>
               </div>
               <div className="modal-content__comments">
                 <Comment
@@ -83,11 +67,8 @@ const Modal = () => {
                   onClick={()=> {}}
                 />
                 <PrimaryButton
-                  label="Comment"
-                  onClick={async () => {
-                    const sig = await signV4()
-                    console.log("🚨", sig)
-                  }}
+                  label="Create a comment"
+                  onClick={()=>setPage('writer')}
                 />
               </div>
 
@@ -99,7 +80,7 @@ const Modal = () => {
   );
 };
 
-export default Modal;
+export default Reader;
 
 
 const Comment = ({ user, date, commentText }) => {
