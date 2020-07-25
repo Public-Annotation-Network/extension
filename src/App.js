@@ -1,6 +1,6 @@
 import './assets/styles/App.scss';
 
-import Modal from './Components/Modal';
+import Router from './Components/Router';
 import ModalProvider from './Contexts/ModalProvider';
 import React from 'react';
 
@@ -10,7 +10,7 @@ import React from 'react';
 function App() {
   return (
     <ModalProvider>
-      <Modal />
+      <Router />
     </ModalProvider>
   );
 }
