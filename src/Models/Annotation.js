@@ -1,4 +1,4 @@
-import { sign as metamaskSign } from './ethereum'
+import { sign as metamaskSign } from '../services/ethereum'
 
 class Annotation {
     constructor({ content, issuerEthAddress, tweetAuthor, tweetId, payload }) {
