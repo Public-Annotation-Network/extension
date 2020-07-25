@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { connectMetamask, signV4 } from '../services/ethereum'
 
-import Annotation from '../services/Annotation'
+import Annotation from '../Models/Annotation'
 import Logo from '../images/logo'
 import { ModalContext } from '../Contexts/ModalProvider';
 
