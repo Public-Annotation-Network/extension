@@ -12,14 +12,11 @@ async function sendQuery (query) {
 
         if (response.status !== 200) { throw new Error(response); }
 
-        let body;
         try {
-            body = await response.json();
+            return await response.json();
         } catch (error) {
             throw new Error('Response body is empty.')
         }
-
-        return body;
     } catch (error) {
         throw new Error('Could not query subgraph: ' + error);
     }
