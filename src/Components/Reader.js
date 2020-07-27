@@ -1,12 +1,30 @@
 import React, { useEffect, useState } from 'react';
 import { connectMetamask, signV4 } from '../services/ethereum'
 
+import Annotation from '../Models/Annotation'
+//getAnnotationCIDsByReference(first, skip, reference) {
 import Logo from '../images/logo'
 import { ModalContext } from '../Contexts/ModalProvider';
+import { getAnnotationCIDs } from '../services/publisher'
+import { getAnnotationCIDsByReference } from '../services/graph'
+import { getAnnotationData } from '../services/ipfs'
+import { getTweetData } from '../helpers'
 
-const Reader = ({setPage}) => {
+const Reader = ({ setPage }) => {
   const [web3Enabled, setWeb3Enabled] = useState(false)
   const [title, setTitle] = useState("nothing...")
+  const [tweetAnnotations, setTweetAnnotations] = useState([])
+
+  useEffect(async () => {
+    const { tweetId, tweetAuthor } = getTweetData()
+    const annotationCIDs = await getAnnotationCIDsByReference({ reference: tweetId })
+    const annotations = (await Promise.all(annotationCIDs.map(cid => {
+      return getAnnotationData(cid)
+    })))
+      .map(payload => new Annotation({ payload }))
+
+    setTweetAnnotations(annotations)
+  }, [])
 
   return (
     <ModalContext.Consumer>
@@ -19,56 +37,22 @@ const Reader = ({setPage}) => {
                 <h3>{`Reading comments`}</h3>
               </div>
               <div className="modal-content__comments">
-                <Comment
-                  user="Joe cool"
-                  date="July 12"
-                  commentText="Do you know what this is? It's the world's smallest violin playing just for the waitresses."
-                />
-
-                <Comment
-                  user="Everyone, ever"
-                  date="July 13"
-                  commentText="May the Force be with you."
-                />
-                <Comment
-                  user="Punk"
-                  date="July 13"
-                  commentText="Go ahead, make my day."
-                />
-                <Comment
-                  user="Car Salesperson"
-                  date="July 13"
-                  commentText="I'm going to make him an offer he can't refuse."
-                />
-                <Comment
-                  user="Jane Doe"
-                  date="July 13"
-                  commentText="There's no place like home."
-                />
-                <Comment
-                  user="John Doe"
-                  date="July 13"
-                  commentText="You talking to me?"
-                />
-                <Comment
-                  user="Journalist"
-                  date="July 13"
-                  commentText="What we've got here is failure to communicate."
-                />
-                <Comment
-                  user="Billy boy"
-                  date="July 13"
-                  commentText="D-J-A-N-G-O. The D is silent."
-                />
+                {tweetAnnotations.length > 0 && tweetAnnotations.map(a => {
+                  return (<Comment
+                    user={a.getShortAuthor()}
+                    date={a.getShortDate()}
+                    commentText={a.getContent()}
+                  />)
+                })}
               </div>
               <div className="modal-content__confirm">
                 <TerciaryButton
                   label="Load more"
-                  onClick={()=> {}}
+                  onClick={() => { }}
                 />
                 <PrimaryButton
                   label="Create a comment"
-                  onClick={()=>setPage('writer')}
+                  onClick={() => setPage('writer')}
                 />
               </div>
 

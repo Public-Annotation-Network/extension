@@ -3,7 +3,7 @@ import fetch from 'cross-fetch';
 const SUBGRAPH_URL = 'https://api.thegraph.com/subgraphs/name/public-annotation-network/subgraph';
 
 
-async function sendQuery (query) {
+async function sendQuery(query) {
     try {
         const response = await fetch(
             SUBGRAPH_URL,
@@ -40,7 +40,7 @@ export async function getAnnotationBatchCIDs(first, skip) {
     return result.data.annotationBatches.map(({ cid }) => cid);
 }
 
-export async function getAnnotationCIDs(first, skip) {
+export async function getAnnotationCIDs({ first = 10, skip = 0 }) {
     const result = await sendQuery(
         `
             {
@@ -59,7 +59,7 @@ export async function getAnnotationCIDs(first, skip) {
     return result.data.annotations.map(({ cid }) => cid);
 }
 
-export  async function getAnnotationCIDsByReference(first, skip, reference) {
+export async function getAnnotationCIDsByReference({ first = 10, skip = 0, reference }) {
     const result = await sendQuery(
         `
             {

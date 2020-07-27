@@ -14,7 +14,7 @@ class Annotation {
                     content: `uri:tweet:${tweetAuthor}/${tweetId}`
                 },
                 proof: {
-                    created: this.issuanceDate,
+                    created: new Date().toJSON(),
                     proofPurpose: "PANSubmission",
                     type: "EthereumECDSA",
                     verificationMethod: "urn:ethereum:messageHash"
@@ -36,15 +36,23 @@ class Annotation {
     }
 
     getContent() {
-        return this.payload.credentialSubject.annotation
+        return JSON.stringify(this.payload.credentialSubject.annotation)
     }
 
     getAuthor() {
         return this.payload.issuer
     }
 
+    getShortAuthor() {
+        return this.payload.issuer.split(':')[2].slice(0,8)+"..."
+    }
+
     getDate() {
-        return new Date(this.payload.issuanceDate)
+        return JSON.stringify(new Date(this.payload.issuanceDate))
+    }
+
+    getShortDate() {
+        return new Date(this.payload.issuanceDate).toLocaleDateString()
     }
 }
 

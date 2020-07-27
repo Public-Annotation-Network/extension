@@ -4,6 +4,7 @@ import { connectMetamask, signV4 } from '../services/ethereum'
 import Annotation from '../Models/Annotation'
 import Logo from '../images/logo'
 import { ModalContext } from '../Contexts/ModalProvider';
+import {getTweetData} from '../helpers'
 
 const Reader = ({ setPage }) => {
   const [web3Enabled, setWeb3Enabled] = useState(false)
@@ -16,12 +17,12 @@ const Reader = ({ setPage }) => {
       alert('This only works on Tweet pages')
     }
 
-    const tweetAuthor = tweetInfo[3]
-    const tweetId = tweetInfo[5]
+    const {tweetId, tweetAuthor} = getTweetData()
 
     let annotation = new Annotation({content: commentContent, issuerEthAddress:"0x123", tweetAuthor, tweetId})
     await annotation.sign()
     alert(JSON.stringify(annotation))
+    console.log(JSON.stringify(annotation))
   }
 
 
