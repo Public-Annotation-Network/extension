@@ -15,49 +15,49 @@ const Reader = ({ setPage }) => {
   const [title, setTitle] = useState("nothing...")
   const [tweetAnnotations, setTweetAnnotations] = useState([])
 
-  useEffect(async () => {
-    const { tweetId, tweetAuthor } = getTweetData()
-    const annotationCIDs = await getAnnotationCIDsByReference({ reference: tweetId })
-    const annotations = (await Promise.all(annotationCIDs.map(cid => {
-      return getAnnotationData(cid)
-    })))
-      .map(payload => new Annotation({ payload }))
+  useEffect(() => {
+    const fetchData = async () => {
+      const { tweetId, tweetAuthor } = getTweetData()
+      const annotationCIDs = await getAnnotationCIDsByReference({ reference: tweetId })
+      const annotations = (await Promise.all(annotationCIDs.map(cid => {
+        return getAnnotationData(cid)
+      })))
+        .map(payload => new Annotation({ payload }))
+        console.log("🚨", annotations)
 
-    setTweetAnnotations(annotations)
+      setTweetAnnotations(annotations)
+    }
+    fetchData()
   }, [])
 
   return (
     <ModalContext.Consumer>
       {(props) => (
-        <div id="modal" className="modal-window">
-          <div className="modal-body">
-            <div className="modal-content">
-              <div className="modal-content__logo">
-                <Logo />
-                <h3>{`Reading comments`}</h3>
-              </div>
-              <div className="modal-content__comments">
-                {tweetAnnotations.length > 0 && tweetAnnotations.map(a => {
-                  return (<Comment
-                    user={a.getShortAuthor()}
-                    date={a.getShortDate()}
-                    commentText={a.getContent()}
-                  />)
-                })}
-              </div>
-              <div className="modal-content__confirm">
-                <TerciaryButton
-                  label="Load more"
-                  onClick={() => { }}
-                />
-                <PrimaryButton
-                  label="Create a comment"
-                  onClick={() => setPage('writer')}
-                />
-              </div>
-
-            </div>
+        <div className="modal-content">
+          <div className="modal-content__logo">
+            <Logo />
+            <h3>{`Reading comments`}</h3>
           </div>
+          <div className="modal-content__comments">
+            {tweetAnnotations.length > 0 && tweetAnnotations.map(a => {
+              return (<Comment
+                user={a.getShortAuthor()}
+                date={a.getShortDate()}
+                commentText={a.getContent()}
+              />)
+            })}
+          </div>
+          <div className="modal-content__confirm">
+            <TerciaryButton
+              label="Load more"
+              onClick={() => { }}
+            />
+            <PrimaryButton
+              label="Create a comment"
+              onClick={() => setPage('writer')}
+            />
+          </div>
+
         </div>
       )}
     </ModalContext.Consumer>

@@ -4,6 +4,7 @@ class Annotation {
     constructor({ content, issuerEthAddress, tweetAuthor, tweetId, payload }) {
         if (payload) {
             this.payload = payload
+            console.log("✅", this)
         } else {
             this.payload = {
                 ["@context"]: ["https://pan.network/annotation/v1"],

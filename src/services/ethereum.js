@@ -13,7 +13,6 @@ export const connectMetamask = () => {
 
 export const sign = (message) => {
     console.log("😬",message)
-    // const msgString = JSON.stringify(message, Object.keys(message).sort());
     const msgString = JSON.stringify(message);
 
     var msg = ethUtil.bufferToHex(new Buffer(msgString, 'utf8'))

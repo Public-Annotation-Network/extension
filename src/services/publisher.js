@@ -58,5 +58,5 @@ export async function getAnnotationCIDsByReference({ first, skip, reference }) {
 }
 
 export async function sendAnnotationToPublisher(annotation) {
-	return await post({ annotation });
+	return await post(PUBLISHER_URL, annotation);
 }
