@@ -16,13 +16,12 @@ const Reader = ({ setPage }) => {
   const [tweetAnnotations, setTweetAnnotations] = useState([])
 
   window.addEventListener("message", function (event) {
+    // event handler that handles the event emitted in content.js
+    // todo: we should move these event handlers all to the same place, probably the Context file. Since
+    // context will probably end up acting as our redux store
     if (event.data.type && (event.data.type === "GET_ANNOTATIONS_RESPONSE")) {
-        console.log("🌐🌐", event.data)
-        // const annotations = (JSON.parse(event.data.responseText)).data.annotations.map(payload => new Annotation({ payload }))
         let annotations = event.data.documents
         annotations = annotations.map(payload => new Annotation({ payload }))
-        console.log("🚨", annotations)
-
       setTweetAnnotations(annotations)
     }
 })

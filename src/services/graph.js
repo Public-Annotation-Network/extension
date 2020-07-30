@@ -62,6 +62,8 @@ export async function getAnnotationCIDs({ first = 10, skip = 0 }) {
 
 
 export async function getAnnotationCIDsByReference({ first = 10, skip = 0, reference }) {
+    // this now only sends the request to the content.js script.
+    // TODO: pass reference as a parameter in the message so that content.js can include it in the POST body
     window.postMessage({type:"GET_ANNOTATIONS" ,reference}, "*");
     // const result = await sendQuery(
     //     `

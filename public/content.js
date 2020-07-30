@@ -46,8 +46,12 @@ async function getAnnotationData(cid) {
 }
 
 async function onDidReceiveMessage(event) {
+  // we should probably add a switch here to handle multiple types of requests
   if (event.data.type && (event.data.type === "GET_ANNOTATIONS")) {
+    // TODO: this data is hardcoded, it has to come from the event
     var data = JSON.stringify({ "query": "\n            {\n                annotations(first: 10, skip: 0, where: { ref_contains: \"1281904943700619265\" }) {\n                    cid\n                    ref\n                }\n            }\n        " });
+    // I used XMLHttpRequest instead of fetch just because it was the first example on Postman, 
+    // on the getAnnotationData above we're using fetch, so we should refactor this function to also use fetch.
     var xhr = new XMLHttpRequest();
 
     xhr.addEventListener("readystatechange", async function () {
@@ -55,6 +59,7 @@ async function onDidReceiveMessage(event) {
         console.log(this.responseText)
         const {data: annotations} = JSON.parse(this.responseText)
         const documents = await Promise.all(annotations.annotations.map(({cid}) => getAnnotationData(cid)))
+        // Components.Reader.js has an event listener which handles this message
         window.postMessage({type:"GET_ANNOTATIONS_RESPONSE" , documents}, "*");
       }
     });
