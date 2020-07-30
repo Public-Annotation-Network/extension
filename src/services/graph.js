@@ -59,21 +59,25 @@ export async function getAnnotationCIDs({ first = 10, skip = 0 }) {
     return result.data.annotations.map(({ cid }) => cid);
 }
 
+
+
 export async function getAnnotationCIDsByReference({ first = 10, skip = 0, reference }) {
-    const result = await sendQuery(
-        `
-            {
-                annotations(first: ${first}, skip: ${skip}, where: { ref_contains: "${reference}" }) {
-                    cid
-                    ref
-                }
-            }
-        `
-    );
+    window.postMessage({type:"GET_ANNOTATIONS" ,reference}, "*");
+    // const result = await sendQuery(
+    //     `
+    //         {
+    //             annotations(first: ${first}, skip: ${skip}, where: { ref_contains: "${reference}" }) {
+    //                 cid
+    //                 ref
+    //             }
+    //         }
+    //     `
+    // );
 
-    if (!result || !result.data || !result.data.annotations) {
-        throw new Error('Unexpected response format.');
-    }
+    // if (!result || !result.data || !result.data.annotations) {
+    //     throw new Error('Unexpected response format.');
+    // }
 
-    return result.data.annotations.map(({ cid }) => cid);
+    // return result.data.annotations.map(({ cid }) => cid);
+    return []
 }

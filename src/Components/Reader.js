@@ -15,17 +15,22 @@ const Reader = ({ setPage }) => {
   const [title, setTitle] = useState("nothing...")
   const [tweetAnnotations, setTweetAnnotations] = useState([])
 
+  window.addEventListener("message", function (event) {
+    if (event.data.type && (event.data.type === "GET_ANNOTATIONS_RESPONSE")) {
+        console.log("🌐🌐", event.data)
+        // const annotations = (JSON.parse(event.data.responseText)).data.annotations.map(payload => new Annotation({ payload }))
+        let annotations = event.data.documents
+        annotations = annotations.map(payload => new Annotation({ payload }))
+        console.log("🚨", annotations)
+
+      setTweetAnnotations(annotations)
+    }
+})
+
   useEffect(() => {
     const fetchData = async () => {
       const { tweetId, tweetAuthor } = getTweetData()
       const annotationCIDs = await getAnnotationCIDsByReference({ reference: tweetId })
-      const annotations = (await Promise.all(annotationCIDs.map(cid => {
-        return getAnnotationData(cid)
-      })))
-        .map(payload => new Annotation({ payload }))
-        console.log("🚨", annotations)
-
-      setTweetAnnotations(annotations)
     }
     fetchData()
   }, [])
