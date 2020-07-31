@@ -4,7 +4,7 @@ import { connectMetamask, signV4 } from '../services/ethereum'
 import Annotation from '../Models/Annotation'
 import Logo from '../images/logo'
 import { ModalContext } from '../Contexts/ModalProvider';
-// import { getAnnotationCIDs } from '../services/publisher'
+import { getAnnotationsByReference } from '../services/publisher'
 import { getAnnotationCIDsByReference } from '../services/graph'
 import { getAnnotationData } from '../services/ipfs'
 import { getTweetData } from '../helpers'
@@ -22,6 +22,10 @@ const Reader = ({ setPage }) => {
       for (const annotationCID of annotationCIDs) {
         annotations.push(new Annotation({ payload: await getAnnotationData(annotationCID) }));
       }
+      // combine perisisted and pending annotations
+      // const annotationsFromPublisher = await getAnnotationsByReference({ reference: tweetId });
+      // console.log(annotations);
+      // console.log(annotationsFromPublisher);
       setTweetAnnotations(annotations);
     })();
   }, [])

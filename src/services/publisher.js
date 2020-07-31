@@ -1,5 +1,5 @@
 // const PUBLISHER_URL = 'https://pan.network/annotation/v1';
-const PUBLISHER_URL = 'http://134.122.90.29:8000';
+const PUBLISHER_URL = 'https://134.122.90.29:8000';
 
 
 async function get(params) {
@@ -17,7 +17,7 @@ async function get(params) {
     });
 }
 
-export async function post(route, body) {
+export async function post(body) {
     return new Promise((resolve) => {
         window.postMessage({ type: 'POST_PUBLISHER', url: PUBLISHER_URL, body: JSON.stringify(body) }, '*');
         window.addEventListener('message', (event) => {
@@ -28,22 +28,10 @@ export async function post(route, body) {
     });
 }
 
-// export async function getAnnotationCIDs( {first=10, skip=0} ) {
-// 		const result = await get({ limit: first, offset: skip });
-
-// 		return result;
-// }
-
-export const getAnnotationCIDs = async ({ first = 10, skip = 0 }) => {
-    const result = await get({ limit: first, offset: skip });
-
-    return result;
-}
-
-export async function getAnnotationCIDsByReference({ first, skip, reference }) {
-    return;
+export async function getAnnotationsByReference({ first = 10, skip = 0, reference }) {
+    return get({ limit: first, offset: skip, content: reference });
 }
 
 export async function sendAnnotationToPublisher(annotation) {
-    return post(PUBLISHER_URL, annotation);
+    return post(annotation);
 }

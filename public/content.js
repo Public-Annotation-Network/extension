@@ -69,11 +69,14 @@ async function onDidReceiveMessage(event) {
 	if (event.data.type && (event.data.type === 'QUERY_PUBLISHER')) {
 		try {
 			const response = await fetch(event.data.url);
+			console.log(response);
 			if (response.status !== 200) { throw new Error(response); }
 			try {
 				const result = await response.json();
+				console.log(result);
 				window.postMessage({ type: 'QUERY_PUBLISHER_RESPONSE', result }, '*');
 			} catch (error) {
+				console.log(error);
 				console.log(error);
 				throw new Error('Response body is empty.')
 			}
