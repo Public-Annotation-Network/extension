@@ -2,10 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { connectMetamask, signV4 } from '../services/ethereum'
 
 import Annotation from '../Models/Annotation'
-//getAnnotationCIDsByReference(first, skip, reference) {
 import Logo from '../images/logo'
 import { ModalContext } from '../Contexts/ModalProvider';
-import { getAnnotationCIDs } from '../services/publisher'
+// import { getAnnotationCIDs } from '../services/publisher'
 import { getAnnotationCIDsByReference } from '../services/graph'
 import { getAnnotationData } from '../services/ipfs'
 import { getTweetData } from '../helpers'
@@ -15,23 +14,16 @@ const Reader = ({ setPage }) => {
   const [title, setTitle] = useState("nothing...")
   const [tweetAnnotations, setTweetAnnotations] = useState([])
 
-  window.addEventListener("message", function (event) {
-    // event handler that handles the event emitted in content.js
-    // todo: we should move these event handlers all to the same place, probably the Context file. Since
-    // context will probably end up acting as our redux store
-    if (event.data.type && (event.data.type === "GET_ANNOTATIONS_RESPONSE")) {
-        let annotations = event.data.documents
-        annotations = annotations.map(payload => new Annotation({ payload }))
-      setTweetAnnotations(annotations)
-    }
-})
-
   useEffect(() => {
-    const fetchData = async () => {
+    (async () => {
       const { tweetId, tweetAuthor } = getTweetData()
-      const annotationCIDs = await getAnnotationCIDsByReference({ reference: tweetId })
-    }
-    fetchData()
+      const annotationCIDs = await getAnnotationCIDsByReference({ reference: tweetId });
+      const annotations = [];
+      for (const annotationCID of annotationCIDs) {
+        annotations.push(new Annotation({ payload: await getAnnotationData(annotationCID) }));
+      }
+      setTweetAnnotations(annotations);
+    })();
   }, [])
 
   return (

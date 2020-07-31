@@ -1,25 +1,15 @@
-import fetch from 'cross-fetch';
-
 const SUBGRAPH_URL = 'https://api.thegraph.com/subgraphs/name/public-annotation-network/subgraph';
 
 
 async function sendQuery(query) {
-    try {
-        const response = await fetch(
-            SUBGRAPH_URL,
-            { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ query }) }
-        );
-
-        if (response.status !== 200) { throw new Error(response); }
-
-        try {
-            return await response.json();
-        } catch (error) {
-            throw new Error('Response body is empty.')
-        }
-    } catch (error) {
-        throw new Error('Could not query subgraph: ' + error);
-    }
+    return new Promise(async (resolve) => {
+        window.postMessage({ type: 'QUERY_SUBGRAPH', url: SUBGRAPH_URL, query: JSON.stringify({ query }) }, '*');
+        window.addEventListener('message', async (event) => {
+            if (event.data.type && (event.data.type === 'QUERY_SUBGRAPH_RESPONSE')) {
+                resolve(event.data.result);
+            }
+        });
+    });
 }
 
 export async function getAnnotationBatchCIDs(first, skip) {
@@ -59,27 +49,21 @@ export async function getAnnotationCIDs({ first = 10, skip = 0 }) {
     return result.data.annotations.map(({ cid }) => cid);
 }
 
-
-
 export async function getAnnotationCIDsByReference({ first = 10, skip = 0, reference }) {
-    // this now only sends the request to the content.js script.
-    // TODO: pass reference as a parameter in the message so that content.js can include it in the POST body
-    window.postMessage({type:"GET_ANNOTATIONS" ,reference}, "*");
-    // const result = await sendQuery(
-    //     `
-    //         {
-    //             annotations(first: ${first}, skip: ${skip}, where: { ref_contains: "${reference}" }) {
-    //                 cid
-    //                 ref
-    //             }
-    //         }
-    //     `
-    // );
+    const result = await sendQuery(
+        `
+            {
+                annotations(first: ${first}, skip: ${skip}, where: { ref_contains: "${reference}" }) {
+                    cid
+                    ref
+                }
+            }
+        `
+    );
 
-    // if (!result || !result.data || !result.data.annotations) {
-    //     throw new Error('Unexpected response format.');
-    // }
+    if (!result || !result.data || !result.data.annotations) {
+        throw new Error('Unexpected response format.');
+    }
 
-    // return result.data.annotations.map(({ cid }) => cid);
-    return []
+    return result.data.annotations.map(({ cid }) => cid);
 }
