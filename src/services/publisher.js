@@ -1,5 +1,6 @@
 // const PUBLISHER_URL = 'https://pan.network/annotation/v1';
-const PUBLISHER_URL = 'https://134.122.90.29:8000';
+// const PUBLISHER_URL = 'https://134.122.90.29:8000';
+const PUBLISHER_URL = 'https://annotations.network/annotations';
 
 
 async function get(params) {

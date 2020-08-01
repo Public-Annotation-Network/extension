@@ -17,15 +17,16 @@ const Reader = ({ setPage }) => {
   useEffect(() => {
     (async () => {
       const { tweetId, tweetAuthor } = getTweetData()
-      const annotationCIDs = await getAnnotationCIDsByReference({ reference: tweetId });
+      // const annotationCIDs = await getAnnotationCIDsByReference({ reference: tweetId });
+      // const annotations = [];
+      // for (const annotationCID of annotationCIDs) {
+      //   annotations.push(new Annotation({ payload: await getAnnotationData(annotationCID) }));
+      // }
       const annotations = [];
-      for (const annotationCID of annotationCIDs) {
-        annotations.push(new Annotation({ payload: await getAnnotationData(annotationCID) }));
+      const annotationsFromPublisher = await getAnnotationsByReference({ reference: tweetId });
+      for (const annotation of annotationsFromPublisher) {
+        annotations.push(new Annotation({  payload: annotation }));
       }
-      // combine perisisted and pending annotations
-      // const annotationsFromPublisher = await getAnnotationsByReference({ reference: tweetId });
-      // console.log(annotations);
-      // console.log(annotationsFromPublisher);
       setTweetAnnotations(annotations);
     })();
   }, [])
