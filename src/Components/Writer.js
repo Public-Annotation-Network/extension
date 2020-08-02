@@ -18,12 +18,12 @@ const Reader = ({ setPage }) => {
       alert('This only works on Tweet pages')
     }
 
-    const { tweetId, tweetAuthor } = getTweetData()
+    const { tweetId, tweetAuthor } = getTweetData();
 
     let annotation = new Annotation({ content: commentContent, issuerEthAddress: "0xaBfEEA201208fcD0eE6a7073dFF0141dd7D7B04c", tweetAuthor, tweetId })
     await annotation.sign()
-    console.log(JSON.stringify(annotation))
-    const res = await sendAnnotationToPublisher(JSON.stringify(annotation.payload))
+    // console.log(JSON.stringify(annotation.payload))
+    const res = await sendAnnotationToPublisher(annotation.payload);
     console.log("🌐", res)
   }
 
