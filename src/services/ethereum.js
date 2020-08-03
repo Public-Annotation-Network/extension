@@ -10,6 +10,13 @@ export const connectMetamask = () => {
     }
     return false
 }
+export const getAddress = () => {
+    if(!window.ethereum.selectedAddress) {
+        connectMetamask()
+        return
+    }
+    return window.ethereum.selectedAddress
+}
 
 export const sign = (message) => {
     console.log("😬",message)

@@ -1,5 +1,5 @@
 import { PrimaryButton, TerciaryButton } from './Buttons'
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react'
 
 import Reader from './Reader'
 import Writer from './Writer'

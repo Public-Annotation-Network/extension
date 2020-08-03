@@ -18,13 +18,9 @@ const Writer = ({ setPage }) => {
     setPublishingStage(1)
     const tweetInfo = window.location.href.split('/')
 
-    // if (tweetInfo[2] !== 'twitter.com' && tweetInfo[4] !== 'status') {
-    //   alert('This only works on Tweet pages')
-    // }
-
     try {
       const { tweetId, tweetAuthor } = getTweetData();
-      let annotation = new Annotation({ content: commentContent, issuerEthAddress: "0xaBfEEA201208fcD0eE6a7073dFF0141dd7D7B04c", tweetAuthor, tweetId })
+      let annotation = new Annotation({ content: commentContent, tweetAuthor, tweetId })
       await annotation.sign()
       const res = await sendAnnotationToPublisher(annotation.payload);
       setPublishingStage(2)
@@ -57,7 +53,12 @@ const Writer = ({ setPage }) => {
             <PrimaryButton
               label="Comment"
               onClick={issueAnnotation}
+              disabled={!window.ethereum.selectedAddress}
             />
+            {!window.ethereum.selectedAddress && <TerciaryButton
+              label="Link Metamask"
+              onClick={connectMetamask}
+            />}
           </div>
         </div>
       )}

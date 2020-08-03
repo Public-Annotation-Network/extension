@@ -1,7 +1,7 @@
+import {getAddress} from '../services/ethereum'
 import { sign as metamaskSign } from '../services/ethereum'
-
 class Annotation {
-    constructor({ content, issuerEthAddress, tweetAuthor, tweetId, payload }) {
+    constructor({ content, tweetAuthor, tweetId, payload }) {
         if (payload) {
             this.payload = payload
             console.log("✅", this)
@@ -9,7 +9,7 @@ class Annotation {
             this.payload = {
                 ["@context"]: ["https://pan.network/annotation/v1"],
                 issuanceDate: new Date().toJSON(),
-                issuer: `urn:ethereum:${issuerEthAddress}`,
+                issuer: `urn:ethereum:${getAddress()}`,
                 credentialSubject: {
                     annotation: content,
                     content: `uri:tweet:${tweetAuthor}/${tweetId}`
