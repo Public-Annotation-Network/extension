@@ -27,7 +27,7 @@ export async function post(body) {
     });
 }
 
-export async function getAnnotationsByReference({ first = 10, skip = 0, reference }) {
+export async function getAnnotationsByReference({ first = 100, skip = 0, reference }) {
     return get({ limit: first, offset: skip, content: reference });
 }
 

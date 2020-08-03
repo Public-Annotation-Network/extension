@@ -4,9 +4,9 @@ import { connectMetamask, signV4 } from '../services/ethereum'
 import Annotation from '../Models/Annotation'
 import Logo from '../images/logo'
 import { ModalContext } from '../Contexts/ModalProvider';
-import { getAnnotationsByReference } from '../services/publisher'
 import { getAnnotationCIDsByReference } from '../services/graph'
 import { getAnnotationData } from '../services/ipfs'
+import { getAnnotationsByReference } from '../services/publisher'
 import { getTweetData } from '../helpers'
 
 const Reader = ({ setPage }) => {
@@ -14,25 +14,33 @@ const Reader = ({ setPage }) => {
   const [title, setTitle] = useState("nothing...")
   const [tweetAnnotations, setTweetAnnotations] = useState([])
 
+  const sortByDate = (anno) => {
+    window.annotations = anno
+    return anno.sort((a, b) => {
+      const dateA = (new Date(a.payload.issuanceDate)).getTime()
+      const dateB = (new Date(b.payload.issuanceDate)).getTime()
+      return (dateB - dateA)
+    })
+  }
+
   useEffect(() => {
     (async () => {
       const { tweetId, tweetAuthor } = getTweetData()
+      let annotations = [];
       try {
-        const annotations = [];
         const annotationsFromPublisher = await getAnnotationsByReference({ reference: tweetId });
         for (const annotation of annotationsFromPublisher) {
-          annotations.push(new Annotation({  payload: annotation }));
+          annotations.push(new Annotation({ payload: annotation }));
         }
-        annotations.sort((a, b) => (new Date(a.getDate()) - new Date(b.getDate())));
+        annotations = sortByDate(annotations)
         setTweetAnnotations(annotations);
       } catch (error) {
         // fallback to the graph and ipfs
         const annotationCIDs = await getAnnotationCIDsByReference({ reference: tweetId });
-        const annotations = [];
         for (const annotationCID of annotationCIDs) {
           annotations.push(new Annotation({ payload: await getAnnotationData(annotationCID) }));
         }
-        annotations.sort((a, b) => (new Date(a.getDate()) - new Date(b.getDate())));
+        annotations = sortByDate(annotations)
         setTweetAnnotations(annotations);
       }
     })();
