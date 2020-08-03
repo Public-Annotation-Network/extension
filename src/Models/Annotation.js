@@ -53,7 +53,7 @@ class Annotation {
     }
 
     getShortDate() {
-        return new Date(this.payload.issuanceDate).toLocaleDateString()
+        return (new Date(this.payload.issuanceDate).toLocaleTimeString() + ', ' + new Date(this.payload.issuanceDate).toLocaleDateString())
     }
 }
 

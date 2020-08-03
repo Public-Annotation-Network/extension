@@ -17,17 +17,24 @@ const Reader = ({ setPage }) => {
   useEffect(() => {
     (async () => {
       const { tweetId, tweetAuthor } = getTweetData()
-      // const annotationCIDs = await getAnnotationCIDsByReference({ reference: tweetId });
-      // const annotations = [];
-      // for (const annotationCID of annotationCIDs) {
-      //   annotations.push(new Annotation({ payload: await getAnnotationData(annotationCID) }));
-      // }
-      const annotations = [];
-      const annotationsFromPublisher = await getAnnotationsByReference({ reference: tweetId });
-      for (const annotation of annotationsFromPublisher) {
-        annotations.push(new Annotation({  payload: annotation }));
+      try {
+        const annotations = [];
+        const annotationsFromPublisher = await getAnnotationsByReference({ reference: tweetId });
+        for (const annotation of annotationsFromPublisher) {
+          annotations.push(new Annotation({  payload: annotation }));
+        }
+        annotations.sort((a, b) => (new Date(a.getDate()) - new Date(b.getDate())));
+        setTweetAnnotations(annotations);
+      } catch (error) {
+        // fallback to the graph and ipfs
+        const annotationCIDs = await getAnnotationCIDsByReference({ reference: tweetId });
+        const annotations = [];
+        for (const annotationCID of annotationCIDs) {
+          annotations.push(new Annotation({ payload: await getAnnotationData(annotationCID) }));
+        }
+        annotations.sort((a, b) => (new Date(a.getDate()) - new Date(b.getDate())));
+        setTweetAnnotations(annotations);
       }
-      setTweetAnnotations(annotations);
     })();
   }, [])
 
