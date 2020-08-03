@@ -1,6 +1,9 @@
 @import "./base.scss";
 @import "./constants.scss";
 
+$extension-width: 360px;
+$offset-right: 20px;
+
 #modal-window {
   position: absolute;
   width: 99%;
@@ -10,17 +13,20 @@
 
   .modal-window {
     top: 0;
-    left: calc(100% - 412px);
+    right: $offset-right;
     margin-top: 2em;
     position: fixed;
     background: $primary-200;
     opacity: 0.9;
-    width: 358px;
-    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+    width: $extension-width;
+    max-width: $extension-width;
+    min-width: 350px;
+    // box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+    box-shadow: rgba(136, 153, 166, 0.2) 0px 0px 15px, rgba(136, 153, 166, 0.15) 0px 0px 3px 1px;
     z-index: 9999;
     border: 1px solid #333748;
     padding: 20px;
-    border: solid 3px $primary-300;
+    // border: solid 3px $primary-300;
     border-radius: $border-radius-large;
   }
 
@@ -30,17 +36,27 @@
 
   .modal-content {
     display: grid;
+    position: relative;
+    &__close {
+      position: absolute;
+      top: 0px;
+      right: 0px;
+    }
+    
+    &__main {
+      height: 350px;
+    }
     &__comments {
-      max-height: 500px;
+      max-height: 350px;
       overflow-y: scroll;
       margin-bottom: 20px;
     }
-    &__comment-button{
+    &__comment-button {
       place-self: center;
     }
-    &__confirm{
+    &__confirm {
       display: flex;
-      flex-direction: column;
+      flex-direction: row;
       place-content: center;
     }
     &__comment-editor {
@@ -109,7 +125,7 @@
       margin-top: 0px;
     }
   }
-  .comment-editor{
+  .comment-editor {
     height: 500px;
     &__input {
       width: 100%;
@@ -123,5 +139,49 @@
       }
     }
   }
-}
 
+  .load-wrapp {
+    height: 100%;
+    margin: 0 10px 10px 0;
+    padding: 20px 20px 20px;
+    border-radius: 5px;
+    text-align: center;
+    display: grid;
+    align-content: center;
+  }
+
+  .load-wrapp:last-child {
+    margin-right: 0;
+  }
+
+  .line {
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    border-radius: 15px;
+    background-color: $primary-300;
+    margin: 6px;
+  }
+
+  .load-3 .line:nth-last-child(1) {
+    animation: loadingC 0.9s 0.1s linear infinite;
+  }
+  .load-3 .line:nth-last-child(2) {
+    animation: loadingC 0.9s 0.2s linear infinite;
+  }
+  .load-3 .line:nth-last-child(3) {
+    animation: loadingC 0.9s 0.3s linear infinite;
+  }
+
+  @keyframes loadingC {
+    0 {
+      transform: translate(0, 0);
+    }
+    50% {
+      transform: translate(0, 15px);
+    }
+    100% {
+      transform: translate(0, 0);
+    }
+  }
+}

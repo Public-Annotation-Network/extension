@@ -2,29 +2,36 @@ import React, { useEffect, useState } from 'react';
 import { connectMetamask, signV4 } from '../services/ethereum'
 
 import Annotation from '../Models/Annotation'
+import { Loading } from './Loading';
 import Logo from '../images/logo'
 import { ModalContext } from '../Contexts/ModalProvider';
 import { getTweetData } from '../helpers'
-import {sendAnnotationToPublisher} from '../services/publisher'
+import { sendAnnotationToPublisher } from '../services/publisher'
 
-const Reader = ({ setPage }) => {
+const Writer = ({ setPage }) => {
   const [web3Enabled, setWeb3Enabled] = useState(false)
   const [title, setTitle] = useState("nothing...")
+  const [publishingStage, setPublishingStage] = useState(0)
   const [commentContent, setCommentContent] = useState('')
+
   const issueAnnotation = async () => {
+    setPublishingStage(1)
     const tweetInfo = window.location.href.split('/')
 
-    if (tweetInfo[2] !== 'twitter.com' && tweetInfo[4] !== 'status') {
-      alert('This only works on Tweet pages')
+    // if (tweetInfo[2] !== 'twitter.com' && tweetInfo[4] !== 'status') {
+    //   alert('This only works on Tweet pages')
+    // }
+
+    try {
+      const { tweetId, tweetAuthor } = getTweetData();
+      let annotation = new Annotation({ content: commentContent, issuerEthAddress: "0xaBfEEA201208fcD0eE6a7073dFF0141dd7D7B04c", tweetAuthor, tweetId })
+      await annotation.sign()
+      const res = await sendAnnotationToPublisher(annotation.payload);
+      setPublishingStage(2)
+      console.log("🌐", res)
+    } catch (e) {
+      setPublishingStage(3)
     }
-
-    const { tweetId, tweetAuthor } = getTweetData();
-
-    let annotation = new Annotation({ content: commentContent, issuerEthAddress: "0xaBfEEA201208fcD0eE6a7073dFF0141dd7D7B04c", tweetAuthor, tweetId })
-    await annotation.sign()
-    // console.log(JSON.stringify(annotation.payload))
-    const res = await sendAnnotationToPublisher(annotation.payload);
-    console.log("🌐", res)
   }
 
   return (
@@ -33,14 +40,18 @@ const Reader = ({ setPage }) => {
         <div className="modal-content">
           <div className="modal-content__logo">
             <Logo />
-            <h3>{`Comment Editor`}</h3>
+            {/* <h3>{`Comment Editor`}</h3> */}
           </div>
-          <div className="modal-content__comment-editor">
+          <div className="modal-content__comment-editor modal-content__main">
             <TerciaryButton
               label="< Back to reading"
               onClick={() => setPage('reader')}
             />
-            <CommentEditor commentContent={commentContent} setCommentContent={setCommentContent} />
+            
+            {publishingStage === 0 && <CommentEditor commentContent={commentContent} setCommentContent={setCommentContent} />}
+            {publishingStage === 1 && <Loading />}
+            {publishingStage === 2 && <p>🚀 Your comment has been published!</p>}
+            {publishingStage === 3 && <p>😭 There was an error publishing your comment. Please try again.</p>}
           </div>
           <div className="modal-content__confirm">
             <PrimaryButton
@@ -54,7 +65,7 @@ const Reader = ({ setPage }) => {
   );
 };
 
-export default Reader;
+export default Writer;
 
 
 const CommentEditor = ({ setCommentContent, commentContent }) => {

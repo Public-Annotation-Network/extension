@@ -1,5 +1,8 @@
 const PUBLISHER_URL = 'https://annotations.network/annotations';
 
+// const timeout = new Promise((resolve, reject) => {
+//     setTimeout(reject, 5, 'two');
+//   });
 
 async function get(params) {
     const query = Object.keys(params)

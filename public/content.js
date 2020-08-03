@@ -75,10 +75,12 @@ async function onDidReceiveMessage(event) {
 				window.postMessage({ type: 'QUERY_PUBLISHER_RESPONSE', result }, '*');
 			} catch (error) {
 				console.log(error);
-				throw new Error('Response body is empty.')
+				window.postMessage({ type: 'QUERY_PUBLISHER_RESPONSE', result: [] }, '*');
+				// throw new Error('Response body is empty.')
 			}
 		} catch(error) {
-			throw new Error('Could not send HTTP request: ' + error);
+			window.postMessage({ type: 'QUERY_PUBLISHER_RESPONSE', result: [] }, '*');
+			// throw new Error('Could not send HTTP request: ' + error);
 		}
 	}
 	// PUBLISHER POSTS
