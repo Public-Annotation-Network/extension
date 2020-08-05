@@ -11,6 +11,11 @@ $offset-right: 20px;
   z-index: 99999;
   font-family: sans-serif;
 
+  .logo-small {
+    width: 50px;
+    height: 40px;
+  }
+
   .modal-window {
     top: 0;
     right: $offset-right;
@@ -28,6 +33,14 @@ $offset-right: 20px;
     padding: 20px;
     // border: solid 3px $primary-300;
     border-radius: $border-radius-large;
+
+    &--collapsed {
+      background: none;
+      border: none;
+      box-shadow: none;
+      right: 0;
+      left: 90%;
+    }
   }
 
   .modal-close-button {
@@ -42,7 +55,7 @@ $offset-right: 20px;
       top: 0px;
       right: 0px;
     }
-    
+
     &__main {
       height: 350px;
     }
@@ -126,9 +139,12 @@ $offset-right: 20px;
     }
   }
   .comment-editor {
-    height: 500px;
+    height: 230px;
+    display: grid;
     &__input {
-      width: 100%;
+      resize: none;
+      justify-self: center;
+      width: 90%;
       min-height: 150px;
       padding: 10px;
       background-color: $primary-250;

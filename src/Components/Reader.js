@@ -92,7 +92,7 @@ const Reader = ({ setPage }) => {
             <Logo />
           </div>
           <div className="modal-content__comments modal-content__main">
-            {loadingInProgress && <Loading />}
+            {loadingInProgress && <Loading label="Loading annotations"/>}
             {!loadingInProgress && tweetAnnotations.length > 0 && tweetAnnotations.map(a => {
               return (<Comment
                 user={a.getShortAuthor()}

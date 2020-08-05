@@ -1,20 +1,8 @@
 /* global chrome */
 
-// chrome.browserAction.onClicked.addListener(function (tab) {
-//   chrome.tabs.sendMessage(tab.id, { message: 'load' });
-//   // chrome.browserAction.setPopup({ popup: "./popup.html" })
-// });
-
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
   chrome.tabs.sendMessage(tab.id, { message: 'load' });
 });
-
-
-// chrome.runtime.onMessage.addListener(
-//   function (message, sender, sendResponse) {
-//     window.postMessage(message,"*")
-//   }
-// );
 
 function handleMessage(request, sender, sendResponse) {
   console.log("Message from the content script: " +
