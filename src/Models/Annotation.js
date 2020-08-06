@@ -55,6 +55,9 @@ class Annotation {
     getShortDate() {
         return (new Date(this.payload.issuanceDate).toLocaleTimeString() + ', ' + new Date(this.payload.issuanceDate).toLocaleDateString())
     }
+    isPublished() {
+        return this.payload && this.payload.published
+    }
 }
 
 export default Annotation

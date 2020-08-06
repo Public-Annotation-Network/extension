@@ -183,6 +183,28 @@ $offset-right: 20px;
   margin-right: 0;
 }
 
+.tooltip {
+  position: relative;
+  display: inline;
+  margin-right: 5px;
+  &__hover-text {
+    display: none;
+  }
+  &:hover {
+    cursor: default;
+    .tooltip__hover-text {
+      position: absolute;
+      display: initial;
+      width: 180px;
+      background: rgba(255, 255, 255, 1);
+      padding: 2px 4px;
+      border-radius: 5px;
+      text-align: center;
+      color: $primary-200;
+    }
+  }
+}
+
 .line {
   display: inline-block;
   width: 15px;
