@@ -128,7 +128,7 @@ $offset-right: 20px;
       background-color: $light-300;
     }
     &:focus {
-      background-color: $primary-400;
+      background-color: initial;
       border: none;
       outline: none;
     }

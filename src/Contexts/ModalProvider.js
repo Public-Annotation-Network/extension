@@ -11,24 +11,41 @@ import useWindowPosition from '../Hooks/useWindowPosition';
 
 export const ModalContext = React.createContext({});
 
+const sources = {
+  theGraph: "theGraph",
+  publisher: "publisher"
+}
+
 const ModalProvider = ({ children }) => {
   const { windowPosition } = useWindowPosition();
 
   const [tweetAnnotations, setTweetAnnotations] = useState([])
   const [loadingInProgress, setLoadingInProgress] = useState(false)
+  const [dataSource, setDataSource] = useState(sources.publisher)
 
   const loadAnnotations = async (withAnimation = false) => {
     (withAnimation && setLoadingInProgress(true))
     const { tweetId, tweetAuthor } = getTweetData()
     let annotations = [];
+
     try {
-      const annotationsFromPublisher = await getAnnotationsByReference({ reference: tweetId });
-      for (const annotation of annotationsFromPublisher) {
-        annotations.push(new Annotation({ payload: annotation }));
+      if (dataSource === sources.publisher) {
+        const annotationsFromPublisher = await getAnnotationsByReference({ reference: tweetId });
+        for (const annotation of annotationsFromPublisher) {
+          annotations.push(new Annotation({ payload: annotation }));
+        }
+        annotations = sortByDate(annotations)
+        setTweetAnnotations(annotations);
+        (withAnimation && setLoadingInProgress(false))
+      } else {
+        const annotationCIDs = await getAnnotationCIDsByReference({ reference: tweetId });
+        for (const annotationCID of annotationCIDs) {
+          annotations.push(new Annotation({ payload: await getAnnotationData(annotationCID) }));
+        }
+        annotations.sort((a, b) => (new Date(a.getDate()) - new Date(b.getDate())));
+        setTweetAnnotations(annotations)
+        (withAnimation && setLoadingInProgress(false))
       }
-      annotations = sortByDate(annotations)
-      setTweetAnnotations(annotations);
-      (withAnimation && setLoadingInProgress(false))
     }
     catch (error) {
       console.error("🚨", error)
@@ -57,7 +74,8 @@ const ModalProvider = ({ children }) => {
         setTweetAnnotations,
         loadingInProgress,
         setLoadingInProgress,
-        loadAnnotations
+        loadAnnotations,
+        dataSource
       }}
     >
       {children}

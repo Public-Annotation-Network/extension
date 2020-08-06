@@ -18,6 +18,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "cross-env INLINE_RUNTIME_CHUNK=false react-scripts build",
+    "build:dev": "dotenv -e .env.development react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -41,6 +42,7 @@
     ]
   },
   "devDependencies": {
-    "cross-env": "7.0.2"
+    "cross-env": "7.0.2",
+    "dotenv-cli": "^3.2.0"
   }
 }
