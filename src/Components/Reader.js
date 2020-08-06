@@ -13,21 +13,10 @@ import { getTweetData } from '../helpers'
 
 const Reader = ({ setPage }) => {
   const [web3Enabled, setWeb3Enabled] = useState(false)
-  const [title, setTitle] = useState("nothing...")
-  const [tweetAnnotations, setTweetAnnotations] = useState([])
-  const [loadingInProgress, setLoadingInProgress] = useState(false)
-
-  const sortByDate = (anno) => {
-    window.annotations = anno
-    return anno.sort((a, b) => {
-      const dateA = (new Date(a.payload.issuanceDate)).getTime()
-      const dateB = (new Date(b.payload.issuanceDate)).getTime()
-      return (dateB - dateA)
-    })
-  }
 
   // useEffect(() => {
   //   (async () => {
+  //     setLoadingInProgress(true)
   //     const { tweetId, tweetAuthor } = getTweetData()
   //     let annotations = [];
   //     try {
@@ -37,53 +26,22 @@ const Reader = ({ setPage }) => {
   //       }
   //       annotations = sortByDate(annotations)
   //       setTweetAnnotations(annotations);
-  //     } catch (error) {
-  //       // fallback to the graph and ipfs
-  //       const annotationCIDs = await getAnnotationCIDsByReference({ reference: tweetId });
-  //       for (const annotationCID of annotationCIDs) {
-  //         annotations.push(new Annotation({ payload: await getAnnotationData(annotationCID) }));
-  //       }
-  //       annotations = sortByDate(annotations)
-  //       setTweetAnnotations(annotations);
-
-  //     } finally {
+  //       setLoadingInProgress(false)
+  //     } 
+  //     catch (error) {
+  //       console.error("🚨", error)
   //       setLoadingInProgress(false)
   //     }
   //   })();
   // }, [])
 
-  useEffect(() => {
-    (async () => {
-      setLoadingInProgress(true)
-      const { tweetId, tweetAuthor } = getTweetData()
-      let annotations = [];
-      try {
-        const annotationsFromPublisher = await getAnnotationsByReference({ reference: tweetId });
-        for (const annotation of annotationsFromPublisher) {
-          annotations.push(new Annotation({ payload: annotation }));
-        }
-        annotations = sortByDate(annotations)
-        setTweetAnnotations(annotations);
-        setLoadingInProgress(false)
-      } 
-      catch (error) {
-        console.error("🚨", error)
-        setLoadingInProgress(false)
-        // // fallback to the graph and ipfs
-        // const annotationCIDs = await getAnnotationCIDsByReference({ reference: tweetId });
-        // for (const annotationCID of annotationCIDs) {
-        //   annotations.push(new Annotation({ payload: await getAnnotationData(annotationCID) }));
-        // }
-        // annotations = sortByDate(annotations)
-        // setTweetAnnotations(annotations);
-
-      }
-    })();
-  }, [])
-
   return (
     <ModalContext.Consumer>
-      {(props) => (
+      {({
+        tweetAnnotations,
+        loadingInProgress,
+        loadAnnotations
+      }) => (
         <div className="modal-content">
           <div className="modal-content__close">
             <TerciaryButton label="hide" onClick={() => setPage('collapsed')} />
@@ -112,7 +70,7 @@ const Reader = ({ setPage }) => {
           <div className="modal-content__confirm">
             <TerciaryButton
               label="Load more"
-              onClick={() => { }}
+              onClick={loadAnnotations}
             />
             <PrimaryButton
               label="Create a comment"

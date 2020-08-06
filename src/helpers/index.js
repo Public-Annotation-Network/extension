@@ -11,3 +11,12 @@ export const getTweetData = (url = undefined) => {
 
     return { tweetAuthor, tweetId }
 }
+
+
+export const sortByDate = (anno) => {
+    return anno.sort((a, b) => {
+      const dateA = (new Date(a.payload.issuanceDate)).getTime()
+      const dateB = (new Date(b.payload.issuanceDate)).getTime()
+      return (dateB - dateA)
+    })
+  }

@@ -43,10 +43,21 @@ const Writer = ({ setPage }) => {
               label="<<"
               onClick={() => setPage('reader')}
             />
-            {publishingStage === 0 && <p>This is where you can create an annotation about the current Tweet. After that, click Comment, which will launch your annotation into the DWeb world!</p> }
+            {publishingStage === 0 && <p>This is where you can create an annotation about the current Tweet. After that, click Comment, which will launch your annotation into the DWeb world!</p>}
             {publishingStage === 0 && <CommentEditor commentContent={commentContent} setCommentContent={setCommentContent} />}
-            {publishingStage === 1 && <Loading label="Processing annotation"/>}
-            {publishingStage === 2 && <p>🚀 Your comment has been published!</p>}
+            {publishingStage === 1 && <Loading label="Processing annotation" />}
+            {publishingStage === 2 && <div className="notification">
+              <span className="emoji emoji--big">🚀</span>
+              <p> Your comment has been published!</p>
+              <TerciaryButton
+                label="<< Go back"
+                onClick={() => {
+                  setPublishingStage(0)
+                  setPage('reader')
+                }}
+              />
+            </div>
+            }
             {publishingStage === 3 && <p>😭 There was an error publishing your comment. Please try again.</p>}
           </div>
           <div className="modal-content__confirm">
